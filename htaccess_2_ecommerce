@@ -1,0 +1,100 @@
+# Ecommerce
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+<IfModule mod_deflate.c>
+  # Comprimir HTML, CSS, JavaScript, Text, XML y fonts
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+  AddOutputFilterByType DEFLATE application/x-font
+  AddOutputFilterByType DEFLATE application/x-font-opentype
+  AddOutputFilterByType DEFLATE application/x-font-otf
+  AddOutputFilterByType DEFLATE application/x-font-truetype
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE font/opentype
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE image/x-icon
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+
+  # Eliminar browser bugs (necesario en caso de navegadores realmente antiguos)
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+  Header append Vary User-Agent
+</IfModule>
+<IfModule mod_headers.c>
+  <IfModule mod_setenvif.c>
+    <IfModule mod_fcgid.c>
+       SetEnvIfNoCase ^Authorization$ "(.+)" XAUTHORIZATION=$1
+       RequestHeader set XAuthorization %{XAUTHORIZATION}e env=XAUTHORIZATION
+    </IfModule>
+    <IfModule mod_proxy_fcgi.c>
+       SetEnvIfNoCase Authorization "(.+)" HTTP_AUTHORIZATION=$1
+    </IfModule>
+  </IfModule>
+
+  <IfModule mod_env.c>
+    # Add security and privacy related headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Robots-Tag "none"
+    Header set X-Download-Options "noopen"
+    Header set X-Permitted-Cross-Domain-Policies "none"
+    Header always add Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
+    SetEnv modHeadersAvailable true
+  </IfModule>
+
+  # Add cache control for static resources
+  <FilesMatch "\.(css|js|svg|gif|png)$">
+    Header set Cache-Control "max-age=15778463"
+  </FilesMatch>
+  
+  # Let browsers cache WOFF files for a week
+  <FilesMatch "\.woff$">
+    Header set Cache-Control "max-age=604800"
+  </FilesMatch>
+</IfModule>
+<IfModule mod_php5.c>
+  php_value upload_max_filesize 5G
+  php_value post_max_size 5G
+  php_value memory_limit 1G
+  php_value mbstring.func_overload 0
+  php_value always_populate_raw_post_data -1
+  php_value default_charset 'UTF-8'
+  php_value output_buffering 0
+  <IfModule mod_env.c>
+    SetEnv htaccessWorking true
+  </IfModule>
+</IfModule>
+<IfModule mod_php7.c>
+  php_value upload_max_filesize 5G
+  php_value post_max_size 5G
+  php_value memory_limit 1G
+  php_value mbstring.func_overload 0
+  php_value default_charset 'UTF-8'
+  php_value output_buffering 0
+  <IfModule mod_env.c>
+    SetEnv htaccessWorking true
+  </IfModule>
+</IfModule>
+<IfModule pagespeed_module>
+  ModPagespeed Off
+</IfModule>
+# END WordPress
